@@ -1,0 +1,114 @@
+/*** VARIABLES **/
+:root {
+    --white: white;
+    --lightgray: #7c7a7a;
+}
+
+
+/*** RESETS -  overriding the browser style sheet ***/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    background: #c7c5c544;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/*** GlOBAL CLASSES - stylings that can be used more than once - reusable classes ***/
+.hide {
+    display: none;
+}
+
+
+/*** CUSTOM STYLES ***/
+
+/* Header Style */
+.background {
+    background-color: #00008b;
+}
+
+
+/* Aside tag styling - input form, search button */
+.input-group, .form-input {
+    display: block !important;
+    width: 100% !important;
+}
+
+.weather-search {
+    border-radius: 5px !important;
+    border: 0.5px solid var(--lightgray);
+    padding: 8px;
+}
+
+.search-button {
+    margin-top: 10px !important;
+    border-radius: 5px !important;
+    background-color: #3e7afc !important;
+    color: var(--white) !important;
+    width: 100% !important;
+
+}
+
+/* Styling of history section */
+.list-group {
+    border-top: 0.5px solid var(--lightgray) !important;
+}
+
+.history-button {
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: #b8b2b2 !important;
+    color: black !important;
+    width: 100%;
+}
+
+
+/* Current day weather forecast styling */
+#today {
+    border: 1px solid var(--lightgray);
+    padding: 5px;
+}
+
+#current {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+}
+
+#current h3, img {
+    margin-right: 10px;
+}
+
+#current2 {
+    margin-left: 5px;
+}
+
+/* 5-day forecast styling */
+#tagline {
+    margin-top: 20px;
+}
+
+#forecast {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.forecasted-weather {
+    border: 1px solid var(--lightgray);
+    color: var(--white);
+    padding: 5px;
+    background-color: #1f1f41;
+    margin-right: 20px;
+
+}
+
+
+
