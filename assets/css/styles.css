@@ -23,9 +23,9 @@ a {
 
 
 /*** GlOBAL CLASSES - stylings that can be used more than once - reusable classes ***/
-.hide {
+/*.hide {
     display: none;
-}
+}*/
 
 
 /*** CUSTOM STYLES ***/
@@ -36,7 +36,7 @@ a {
 }
 
 
-/* Aside tag styling - input form, search button */
+/* Styling for input form, search button */
 .input-group, .form-input {
     display: block !important;
     width: 100% !important;
@@ -77,6 +77,12 @@ a {
     padding: 5px;
 }
 
+#today h3, p {
+    padding: 5px;
+    margin-left: 5px;
+    color: var(--lightgray);
+}
+
 #current {
     display: flex;
     align-items: center;
@@ -84,7 +90,7 @@ a {
 }
 
 #current h3, img {
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 #current2 {
@@ -99,6 +105,13 @@ a {
 #forecast {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+#forecast p {
+    color: var(--lightgray);
+    grid-column: 1 / 6;
+    margin-left: -3px;
 }
 
 .forecasted-weather {
@@ -106,8 +119,6 @@ a {
     color: var(--white);
     padding: 5px;
     background-color: #1f1f41;
-    margin-right: 20px;
-
 }
 
 
