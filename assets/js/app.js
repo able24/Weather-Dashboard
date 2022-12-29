@@ -1,5 +1,4 @@
 /*** PSUEDOCODE ***/
-
 /* 
   When The Page Loads:
 
@@ -30,37 +29,38 @@ var searchButton = $('#search-button');
 var city = $('#search-input');
 var currentWeather = $('#today');
 var forecastWeather = $('#forecast');
-var currentDay = moment().format('D/MM/YYYY');
 
 
 
-function citySearched() {
-    $.get(currentURL + `q=${city.val()}`)
+// Function to pull current and forcast weather data when user enters a city name
+function getWeatherData() {
+    $.get(currentURL + `q=${city.val()}`)       // Fetching weather data for current day based on city entered by user
         .then(function (currentData) {
-            $('.hide').hide();
-            currentWeather.html(`<div id="current">
-        <h3>${city.val()}</h3>
-        <h3>(${currentDay})</h3>
+            var currentDay = moment().format('D/MM/YYYY');  // Setting the date of the current day
+            currentWeather.html('');                       // Clearing out the place holder for this section/div
+            currentWeather.append(`<div id="current">    
+        <h3>${city.val()}</h3>    
+        <h3>(${currentDay})</h3> 
         <img src="${iconURL + currentData.weather[0].icon + '.png'}" alt="icon">
       </div>
       <div id="current2">
         <p>Temp: ${Math.round(currentData.main.temp)}℃</p>
-        <p>Wind: ${currentData.wind.speed}</p>
-        <p>Hunidity: ${currentData.main.humidity}%</p>
-      </div>`);
-
-            $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)
+        <p>Wind: ${currentData.wind.speed} meter/sec</p>
+        <p>Humidity: ${currentData.main.humidity}%</p>
+      </div>`);                                            // Displaying the city entered by user, the current day, the weather icon, the temperature (rounded to whole number) in degree celsius, the humidity and wind speed in meter/sec
+            $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)  // Fetching the weather data for a 5 day forecast
                 .then(function (forecastData) {
-                    console.log(forecastData);
-                    $('.hide').hide();
+                    forecastWeather.html('');  // Clearing out the place holder for this section/div
                     for (var forecastObj of forecastData.list) {
-                        forecastWeather.html(`<div class="forecasted-weather">
-                        <h5>${forecastObj.clouds.dt_txt}</h5>
+                      var timezone = forecastData.city.timezone;  // Storing timezone for the city entered by user into a variable
+                      var objDateTime = moment(forecastObj.dt_txt); // Storing the date and time for the city entered by the user into a variable
+                        forecastWeather.append(`<div class="forecasted-weather">
+                        <h5>${objDateTime.add(timezone, 'seconds').format('D/MM/YYYY; h a')}</h5>
                         <img src="${iconURL + forecastObj.weather[0].icon + '.png'}" alt="Icon">
                        <p>Temp: ${Math.round(forecastObj.main.temp)}℃</p>
-                       <p>Wind: ${forecastObj.wind.speed}</p>
-                       <p>Hunidity: ${forecastObj.main.humidity}%</p>
-                      </div>`);
+                       <p>Wind: ${forecastObj.wind.speed} meter/sec</p>
+                       <p>Humidity: ${forecastObj.main.humidity}%</p>
+                      </div>`); // Displaying the 5 day forecast for the city entered by the user, the date and local time, the weather icon, the temperature (rounded to whole number) in degree celsius, the humidity and wind speed in meter/sec
                     };
             });
 
@@ -68,24 +68,15 @@ function citySearched() {
 }
 
 
-
+// Function to to trigger data output when the search button is clicked
 function init() {
     searchButton.on('click', function (e) {
-        e.preventDefault();
-        citySearched();
+        e.preventDefault();    
+        getWeatherData();
     });
 };
 
 init();
-/* div for forecasted-weather
-<div class="forecasted-weather">
-            <h5>Date</h5>
-            <img src="#" alt="Weather Icon">
-            <p>Temp:</p>
-            <p>Wind:</p>
-            <p>Hunidity:</p>
-          </div> */
-
 
 /* History Button
 <button type="submit" class="btn history-button" id="history-button" aria-label="submit search">
