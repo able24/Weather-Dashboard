@@ -108,7 +108,7 @@ function init() {
   searchButton.on('click', function (e) {
     e.preventDefault();
     displayWeatherInfo();
-    //historySearch();
+    historySearch();
   });
 };
 
