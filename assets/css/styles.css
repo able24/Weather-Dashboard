@@ -56,7 +56,7 @@ a {
     border-top: 0.5px solid var(--lightgray) !important;
 }
 
-.history-button {
+button.searchedKey {
     margin-top: 10px;
     border-radius: 5px;
     background-color: #b8b2b2 !important;
@@ -111,7 +111,7 @@ a {
 .forecasted-weather {
     border: 1px solid var(--lightgray);
     color: var(--white);
-    padding: 5px;
+    padding: 8px;
     background-color: #25254e;
 }
 
