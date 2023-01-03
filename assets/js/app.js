@@ -31,49 +31,41 @@ var currentWeather = $('#today');
 var forecastWeather = $('#forecast');
 var historyButton = $('#history-button');
 var historySection = $('#history');
-var searchedCity = [];
-
-
-
 
 
 //Function to save and retrieve city name from localStorage
 function historySearch() {
-  if (searchedCity.length === 0) {
-    searchedCity.push(city.val());
-    localStorage.setItem('City', JSON.stringify(searchedCity));
-    historySection.append(`<button type="submit" class="btn history-button" id="history-button" aria-label="submit search">${city.val()}</button>
-    `)
-  } else {
-    for (var name of searchedCity) {
-      if (name !== city.val()) {
-        searchedCity.push(city.val());
-        localStorage.setItem('City', JSON.stringify(searchedCity));
-        historySection.append(`<button type="submit" class="btn history-button" id="history-button" aria-label="submit search">${city.val()}</button>
-    `)
-      } else {
-        return;
-      }
-    }
-  };
+  if (localStorage.getItem('City') == null) {
+    localStorage.setItem('City', JSON.stringify([]));
 
-  /*historyButton.on('click', function (e) {
-    e.preventDefault();
-    var targetButton = e.target;
+  }; 
 
-    displayWeatherInfo(targetButton);
-  });*/
+  var storedCity = JSON.parse(localStorage.getItem('City'));
+    storedCity.push(city.val());
+
+    localStorage.setItem('City', JSON.stringify(storedCity));
+
+}
+
+function displayHistory() {
+  var storedCity = JSON.parse(localStorage.getItem('City'));
+  historySection.empty();
+  storedCity.forEach(function (cityName) {
+    historySection.append(`<button type="submit" class="btn history-button" id="history-button" aria-label="submit search" onClick="${displayWeatherInfo(cityName)}">${cityName}</button>
+    `)
+
+  });
 
 };
 
 
-// Function to pull current and forcast weather data when user enters a city name
-function displayWeatherInfo() {
-  $.get(currentURL + `q=${city.val()} `)       // Fetching weather data for current day based on city entered by user
-    .then(function (currentData) {
-      var currentDay = moment().format('D/MM/YYYY');  // Setting the date of the current day
-      currentWeather.html('');                       // Clearing out the place holder for this section/div
-      currentWeather.append(`< div id = "current" >    
+  // Function to pull current and forcast weather data when user enters a city name
+  function displayWeatherInfo() {
+    $.get(currentURL + `q=${city.val()} `)       // Fetching weather data for current day based on city entered by user
+      .then(function (currentData) {
+        var currentDay = moment().format('D/MM/YYYY');  // Setting the date of the current day
+        currentWeather.html('');                       // Clearing out the place holder for this section/div
+        currentWeather.append(`<div id="current">    
         <h3>${city.val()}</h3>    
         <h3>(${currentDay})</h3> 
         <img src="${iconURL + currentData.weather[0].icon + '.png'}" alt="icon">
@@ -83,36 +75,37 @@ function displayWeatherInfo() {
         <p>Wind: ${currentData.wind.speed} meter/sec</p>
         <p>Humidity: ${currentData.main.humidity}%</p>
       </div>`);                                            // Displaying the city entered by user, the current day, the weather icon, the temperature (rounded to whole number) in degree celsius, the humidity and wind speed in meter/sec
-      $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)  // Fetching the weather data for a 5 day forecast
-        .then(function (forecastData) {
-          forecastWeather.html('');  // Clearing out the place holder for this section/div
-          for (var forecastObj of forecastData.list) {
-            var timezone = forecastData.city.timezone;  // Storing timezone for the city entered by user into a variable
-            var objDateTime = moment(forecastObj.dt_txt); // Storing the date and time for the city entered by the user into a variable
-            forecastWeather.append(`< div class="forecasted-weather" >
+        $.get(forecastURL + `lat=${currentData.coord.lat}&lon=${currentData.coord.lon}`)  // Fetching the weather data for a 5 day forecast
+          .then(function (forecastData) {
+            forecastWeather.html('');  // Clearing out the place holder for this section/div
+            for (var forecastObj of forecastData.list) {
+              var timezone = forecastData.city.timezone;  // Storing timezone for the city entered by user into a variable
+              var objDateTime = moment(forecastObj.dt_txt); // Storing the date and time for the city entered by the user into a variable
+              forecastWeather.append(`<div class="forecasted-weather">
                         <h5>${objDateTime.add(timezone, 'seconds').format('D/MM/YYYY; h a')}</h5>
                         <img src="${iconURL + forecastObj.weather[0].icon + '.png'}" alt="Icon">
                        <p>Temp: ${Math.round(forecastObj.main.temp)}℃</p>
                        <p>Wind: ${forecastObj.wind.speed} meter/sec</p>
                        <p>Humidity: ${forecastObj.main.humidity}%</p>
                       </div>`); // Displaying the 5 day forecast for the city entered by the user, the date and local time, the weather icon, the temperature (rounded to whole number) in degree celsius, the humidity and wind speed in meter/sec
-          };
-        });
+            };
+          });
 
+      });
+  }
+
+
+  // Function to to trigger data output when the search button is clicked
+  function init() {
+    searchButton.on('click', function (e) {
+      e.preventDefault();
+      displayWeatherInfo();
+      historySearch();
+      displayHistory();
     });
-}
+  };
+
+  init();
 
 
-// Function to to trigger data output when the search button is clicked
-function init() {
-  searchButton.on('click', function (e) {
-    e.preventDefault();
-    displayWeatherInfo();
-    historySearch();
-  });
-};
-
-init();
-
-localStorage.clear();
-
+  localStorage.clear();
