@@ -126,6 +126,9 @@ function displayHistory() {
   });
 };
 
+// To display the history searches even after refresh
+displayHistory();
+
 
 function usedKey(e) {
   // $(this) is to get the clicked city 
@@ -133,6 +136,9 @@ function usedKey(e) {
   // pass on the clicked city to the search box to fetch weather details
   displayWeatherInfo(buttonVal);
 };
+
+//To allow the history buttons after refresh in the DOM display weather info when clicked
+$('button.searchedKey').click(usedKey);
 
 
 // Function to to trigger data output when the search button is clicked
@@ -145,4 +151,5 @@ function init() {
 };
 
 init();
+
 
